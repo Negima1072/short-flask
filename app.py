@@ -1,6 +1,6 @@
 from flask import Flask, redirect, request
 from db_client import mysql
-from urlparse import urlparse
+from urllib.parse import urlparse
 import random, string
 
 def randomstr(n):
