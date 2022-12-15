@@ -1,6 +1,11 @@
 from flask import Flask, redirect, request
 from db_client import 
 from urlparse import urlparse
+import random, string
+
+def randomstr(n):
+   randlst = [random.choice(string.ascii_letters + string.digits) for i in range(n)]
+   return ''.join(randlst)
 
 app = Flask(__name__)
 
@@ -19,7 +24,6 @@ def db_initialize():
                 '''
             )
             conn.commit()
-    
 
 @app.route("/")
 def index():
@@ -45,8 +49,20 @@ def short():
         return "BadRequest", 400
     with mysql() as conn:
         with conn.cursor() as cur:
-            cur.execute("")
-
+            trycount = 0
+            while True:
+                trycount += 1
+                page_id = randomstr(5)
+                cur.execute("SELECT id from short.ijij_cf WHERE page_id = %s", (page_id))
+                result = cur.fetchall()
+                if len(result) <= 0:
+                    with conn.cursor() as cur2:
+                        cur2.execute("INSERT INTO short.ijij_cf(page_id, url) VALUES(%s, %s)", (page_id, url))
+                        conn.commit()
+                    return "https://ijij.cf/"+page_id
+                if trycount >= 5:
+                    return "TooManyData", 500
+    return "ServerError", 500
 
 if __name__ == '__main__':
     db_initialize()
