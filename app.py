@@ -17,7 +17,7 @@ def db_initialize():
         with conn.cursor() as cur:
             cur.execute(
                 '''CREATE TABLE IF NOT EXISTS short.ijij_cf (
-                    id int(10) NOT NULL NOT_INCREMENT PRIMARY KEY,
+                    id int(10) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                     page_id varchar(6) NOT NULL,
                     url varchar(255) NOT NULL
                 )
