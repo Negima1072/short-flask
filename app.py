@@ -1,5 +1,5 @@
 from flask import Flask, redirect, request
-from db_client import 
+from db_client import mysql
 from urlparse import urlparse
 import random, string
 
